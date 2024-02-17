@@ -1,7 +1,6 @@
 import React from 'react';
 import BlackHeartIcon from '../../assets/redHeartIcon.svg';
 import WhiteHeartIcon from '../../assets/whiteHeartIcon.svg';
-import styles from './favoriteBtn.module.css';
 import Context from '../../context/Context';
 import { FavoriteType } from '../../types';
 
@@ -20,7 +19,7 @@ function FavoriteBtn({ obj }: { obj: FavoriteType }) {
   };
   return (
     <button
-      className={ styles.btn }
+      className='self-end'
       onClick={ () => {
         handleClick();
       } }

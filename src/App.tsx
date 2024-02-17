@@ -5,6 +5,7 @@ import Provider from "./context/Provider"
 import Release from "./pages/Release"
 import Noticias from "./pages/Noticias"
 import './index.css';
+import Inscrever from "./pages/Inscrever"
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/favorito" element={<Favorite />} />
         <Route path="/release" element={<Release />} />
         <Route path="/noticia" element={<Noticias />} />
+        <Route path="/inscrever" element={<Inscrever />} />
       </Routes>
     </Provider>
   )

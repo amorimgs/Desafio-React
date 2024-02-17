@@ -1,12 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Context from '../../context/Context';
-import FavoriteBtn from '../../components/FavoriteBtn';
 import Header from '../../components/Header';
+import Card from '../../components/Card';
 
 const Home = () => {
-  const [count, setCount] = React.useState(10);
+  const [count, setCount] = React.useState(8);
   const { data } = React.useContext(Context)
-  
+  const [dataOrdenada, setDataOrdenada] = React.useState(data.items)
+  const [radio, setRadio] = React.useState('Data');
+  const [input, setInput] = React.useState('');
   React.useEffect(() => {
     const handleScroll = async () => {
       const { scrollHeight, clientHeight, scrollTop } = document.documentElement;
@@ -20,48 +22,54 @@ const Home = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   },[])
+  useEffect(() => {
+    setDataOrdenada(data.items)
+  },[data])
+  const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.id === 'input') {
+      setInput(e.target.value);
+    }
+    setRadio(e.target.value);
+  };
 
-  function calcularDiasPassados(dataString: string): number {
-    // Extrair dia, mês e ano da string
-    const partesData: string[] = dataString.split('/');
-    const dia: number = parseInt(partesData[0]);
-    const mes: number = parseInt(partesData[1]) - 1; // O mês começa do zero
-    const ano: number = parseInt(partesData[2]);
+  React.useEffect(() => {
+    if (radio === 'Data') {
+      setDataOrdenada(data.items);
+    } else {
+      const receitasFormatadas = [...data.items].sort((a:any, b:any) => a.titulo.localeCompare(b.titulo))
+      setDataOrdenada(receitasFormatadas)
+    }
+  },[radio])
 
-    // Criar objetos Date para a data atual e a data fornecida
-    const dataAtual: Date = new Date();
-    const dataFornecida: Date = new Date(ano, mes, dia);
 
-    // Calcular a diferença em milissegundos entre as duas datas
-    const diferencaMilissegundos: number = dataAtual.getTime() - dataFornecida.getTime();
-
-    // Converter a diferença em milissegundos para dias
-    const diasPassados: number = Math.floor(diferencaMilissegundos / (1000 * 60 * 60 * 24));
-
-    return diasPassados;
-}
  return (
-    <main>
+    <div className='bg-zinc-100'>
       <Header />
-      {data.items && data.items.length > 0 && data.items.slice(0, count).map((el:any, index:number) => {
-        return (
-          <div key={index}>
-            <h1>{el.titulo}</h1>
-            <p>{el.introducao}</p>
-            <p>{calcularDiasPassados(el.data_publicacao.split(' ')[0])} dias atrás</p>
-            <a href={el.link} target='_blank'>Ler notícia completa...</a>
-              <FavoriteBtn obj={{
-                id: el.id,
-                titulo: el.titulo,
-                introducao: el.introducao,
-                data_publicacao: el.data_publicacao, 
-                link: el.link,}
-                }
-              />
-          </div>
-        )
-      })}
-    </main>
+      <div className='flex items-center justify-between mx-20 my-10'>
+        
+        <input id='input' type="text" onChange={handleChange} placeholder='Busca por Titulo' className='p-4 w-1/2 rounded-md placeholder:text-zinc-900 bg-yellow-400' />
+        <div className='flex items-center gap-10'>
+          <p>Ordenar: </p>
+          <label className='text-xl'><input className='mr-1' type="radio" value="Data" checked={radio === 'Data'} onChange={handleChange} />Data</label>
+          <label className='text-xl'><input className='mr-1' type="radio" value="Alfabetica" checked={radio === 'Alfabetica'} onChange={handleChange} />Alfabetica</label>
+        </div>
+      </div>
+      <main className='flex items-center justify-between flex-wrap gap-4 mx-20 mt-20'>
+        {dataOrdenada && dataOrdenada.length > 0 && dataOrdenada.filter((el:any)=>
+          el.titulo.toLowerCase().includes(input.toLowerCase())
+        ).slice(0, count).map((el:any, index:number) => {
+          return (
+            <Card key={index} dados={ 
+              {id: el.id,
+              titulo: el.titulo,
+              introducao: el.introducao,
+              data_publicacao: el.data_publicacao,
+              link: el.link,}
+            }/>
+          )
+        })}
+      </main>
+    </div>
   );
 }
 
