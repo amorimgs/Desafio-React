@@ -19,9 +19,8 @@ const Home = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-
   },[])
-  console.log(count);
+
   function calcularDiasPassados(dataString: string): number {
     // Extrair dia, mês e ano da string
     const partesData: string[] = dataString.split('/');
