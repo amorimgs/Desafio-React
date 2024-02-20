@@ -8,7 +8,7 @@ type CardProps = {
     link:string;
   }
 }
-const index = ({dados}:CardProps) => {
+const Card = ({dados}:CardProps) => {
   function calcularDiasPassados(dataString: string): number {
     // Extrair dia, mês e ano da string
     const partesData: string[] = dataString.split('/');
@@ -29,9 +29,9 @@ const index = ({dados}:CardProps) => {
     return diasPassados;
 }
   return (
-    <div className='bg-white w-96 p-10 shadow-zinc-500 shadow-md flex flex-col gap-10'>
+    <div className='bg-white w-96 h-96 p-5 shadow-zinc-500 shadow-md flex flex-col gap-5'>
               <h1 className='font-semibold'>{dados.titulo}</h1>
-              <p>{dados.introducao}</p>
+              <p className='text-sm flex-1'>{dados.introducao}</p>
               <div className='flex items-center justify-between'>
                 <p>{calcularDiasPassados(dados.data_publicacao.split(' ')[0])} dias atrás</p>
                 <a href={dados.link} target='_blank' className='bg-yellow-500 text-zinc-900 font-semibold p-3 text-xs rounded-md'>LER NOTICIA COMPLETA</a>
@@ -48,4 +48,4 @@ const index = ({dados}:CardProps) => {
   )
 }
 
-export default index
+export default Card

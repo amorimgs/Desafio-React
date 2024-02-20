@@ -2,11 +2,16 @@ import React from 'react'
 import Context from '../../context/Context'
 import Header from '../../components/Header';
 import Card from '../../components/Card';
+import Filter from '../../components/Filter';
+import BtnTop from '../../components/BtnTop';
 
 const Release = () => {
   const context = React.useContext(Context);
   const [release, setRelease] = React.useState([]);
   const [count, setCount] = React.useState(8);
+  const [dataOrdenada, setDataOrdenada] = React.useState(release);
+  const [radio, setRadio] = React.useState('Data');
+  const [input, setInput] = React.useState('');
 
   React.useEffect(() => {
     if ( context.data.items ) {
@@ -31,11 +36,35 @@ const Release = () => {
     };
   },[])
 
+  React.useEffect(() => {
+    setDataOrdenada(release)
+  },[release])
+  const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.id === 'input') {
+      setInput(e.target.value);
+    } else {
+      setRadio(e.target.value);
+    }
+
+    
+  };
+  React.useEffect(() => {
+    if (radio === 'Data') {
+      setDataOrdenada(release);
+    } else if (radio === 'Alfabetica') {
+      const dadosFormatados = [...release].sort((a:any, b:any) => a.titulo.localeCompare(b.titulo))
+      setDataOrdenada(dadosFormatados)
+    }
+  },[radio])
+
   return (
     <div>
       <Header />
-      <div className='flex items-center justify-between flex-wrap gap-4 mx-20 mt-20'>
-        {release && release.length > 0 && release.slice(0, count).map((el:any, index:number) => {
+      <Filter radio={radio} input={input} handleChange={handleChange} />
+      <div className='flex items-center justify-center flex-wrap gap-4 mx-5 mt-10'>
+        {dataOrdenada && dataOrdenada.length > 0 && dataOrdenada.filter((el:any)=>
+          el.titulo.toLowerCase().includes(input.toLowerCase())
+        ).slice(0, count).map((el:any, index:number) => {
           return (
             <Card key={index} dados={ 
               {id: el.id,
@@ -47,6 +76,7 @@ const Release = () => {
           )
         })}
       </div>
+      <BtnTop />  
     </div>
   )
 }
