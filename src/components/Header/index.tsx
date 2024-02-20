@@ -4,7 +4,7 @@ function Header() {
   const location = window.location.pathname;
   
   return (
-    <header className='bg-yellow-400 p-5 w-screen'>
+    <header className='bg-yellow-400 p-5'>
     <div className='flex flex-col items-center gap-10'>
       <h1 className='text-zinc-700 font-bold text-7xl'>News</h1>
       <Link to='/inscrever' className='bg-white p-2 rounded-md text-zinc-500 hover:bg-slate-100 hover:text-zinc-900 text-center max-w-52'>INSCREVA-SE</Link>
