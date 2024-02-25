@@ -9,7 +9,7 @@ const Favorite = () => {
   return (
     <div>
       <Header />
-      <div className='flex items-center justify-between flex-wrap gap-4 mx-20 mt-20'>
+      <div className='flex items-center justify-between flex-wrap gap-4 mx-5 mt-10'>
         {(context.favorite && context.favorite.length > 0) ? context.favorite.map((el:any, index:number) => {
           return (
             <Card key={index} dados={ 
